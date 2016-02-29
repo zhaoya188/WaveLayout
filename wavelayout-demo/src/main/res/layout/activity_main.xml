@@ -10,13 +10,13 @@
     app:wl_duration="3000"
     app:wl_radius="@dimen/waveRadius"
     app:wl_scale="6"
-    >
+>
 
   <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
       android:text="@string/app_name"
-      />
+  />
 
 </com.hrules.wavelayout.WaveLayout>

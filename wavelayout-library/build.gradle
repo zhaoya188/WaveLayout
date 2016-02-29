@@ -2,27 +2,27 @@ apply plugin: 'com.android.library'
 apply plugin: 'bintray-release'
 
 android {
-    compileSdkVersion androidBuildCompileSDKVersion
-    buildToolsVersion androidBuildToolsVersion
+  compileSdkVersion androidBuildCompileSDKVersion
+  buildToolsVersion androidBuildToolsVersion
 
-    defaultConfig {
-        minSdkVersion androidBuildMinSDKVersion
-        targetSdkVersion androidBuildTargetSDKVersion
-        versionCode libraryVersionCode
-        versionName libraryVersionName
-    }
+  defaultConfig {
+    minSdkVersion androidBuildMinSDKVersion
+    targetSdkVersion androidBuildTargetSDKVersion
+    versionCode libraryVersionCode
+    versionName libraryVersionName
+  }
 }
 
 dependencies {
-    compile supportDependencies.supportAnnotations
+  compile supportDependencies.supportAnnotations
 }
 
 publish {
-    userOrg = 'hrules6872'
-    groupId = 'com.hrules'
-    artifactId = 'wavelayout'
-    version = libraryVersionName
-    description = 'Wave Layout'
-    website = 'https://github.com/hrules6872/WaveLayout'
-    repository = "https://github.com/hrules6872/WaveLayout.git"
+  userOrg = 'hrules6872'
+  groupId = 'com.hrules'
+  artifactId = 'wavelayout'
+  version = libraryVersionName
+  description = 'Wave Layout'
+  website = 'https://github.com/hrules6872/WaveLayout'
+  repository = "https://github.com/hrules6872/WaveLayout.git"
 }

@@ -1,19 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion androidBuildCompileSDKVersion
-    buildToolsVersion androidBuildToolsVersion
+  compileSdkVersion androidBuildCompileSDKVersion
+  buildToolsVersion androidBuildToolsVersion
 
-    defaultConfig {
-        applicationId "com.hrules.wavelayout.demo"
-        minSdkVersion androidBuildMinSDKVersion
-        targetSdkVersion androidBuildTargetSDKVersion
-        versionCode 100
-        versionName "1.0.0"
-    }
+  defaultConfig {
+    applicationId "com.hrules.wavelayout.demo"
+    minSdkVersion androidBuildMinSDKVersion
+    targetSdkVersion androidBuildTargetSDKVersion
+    versionCode 100
+    versionName "1.0.0"
+  }
 }
 
 dependencies {
-    compile supportDependencies.appCompat
-    compile project(':wavelayout-library')
+  compile supportDependencies.appCompat
+  compile project(':wavelayout-library')
 }
