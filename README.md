@@ -6,7 +6,7 @@ WaveLayout
 Add this dependency to your build.gradle file:
 ```java
 dependencies {
-    compile 'com.hrules:wavelayout:1.0.0'
+    compile 'com.hrules:wavelayout:1.0.1'
 }
 ```
 ##Usage
