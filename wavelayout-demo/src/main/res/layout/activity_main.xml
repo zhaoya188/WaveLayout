@@ -4,12 +4,12 @@
     android:id="@+id/waveLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:wl_amount="6"
+    app:wl_amount="@integer/waveAmount"
     app:wl_autoStart="true"
     app:wl_direction="outWards"
-    app:wl_duration="3000"
+    app:wl_duration="@integer/waveDuration"
     app:wl_radius="@dimen/waveRadius"
-    app:wl_scale="6"
+    app:wl_scale="@integer/waveScale"
 >
 
   <TextView

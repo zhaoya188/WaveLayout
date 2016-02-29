@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -88,7 +89,7 @@ public class WaveLayout extends RelativeLayout {
     amount = typedArray.getInt(R.styleable.WaveLayout_wl_amount,
         resources.getInteger(R.integer.default_wavesCount));
     scale = typedArray.getFloat(R.styleable.WaveLayout_wl_scale,
-        resources.getDimension(R.dimen.default_scale));
+        getFloatFromResources(R.dimen.default_scale));
     style = typedArray.getInt(R.styleable.WaveLayout_wl_style, DEFAULT_STYLE);
     direction = typedArray.getInt(R.styleable.WaveLayout_wl_direction, DEFAULT_DIRECTION);
     correctionX = typedArray.getDimension(R.styleable.WaveLayout_wl_correctionX, 0f);
@@ -110,6 +111,12 @@ public class WaveLayout extends RelativeLayout {
     if (autoStart) {
       start();
     }
+  }
+
+  private float getFloatFromResources(int resId) {
+    TypedValue typedValue = new TypedValue();
+    getResources().getValue(resId, typedValue, true);
+    return typedValue.getFloat();
   }
 
   public void resetCorrectionXY() {
