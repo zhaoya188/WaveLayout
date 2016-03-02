@@ -53,6 +53,9 @@ public class WaveLayout extends RelativeLayout {
   private Interpolator interpolator;
 
   private final ArrayList<WaveView> waveViews = new ArrayList<>();
+  private ArrayList<WaveLayoutListener> listeners;
+
+  private boolean stopping;
 
   public WaveLayout(Context context) {
     this(context, null);
@@ -108,8 +111,35 @@ public class WaveLayout extends RelativeLayout {
     addWaveViews(context);
     setCorrectionXY(correctionX, correctionY);
 
+    stopping = false;
     if (autoStart) {
       start();
+    }
+  }
+
+  public void addWaveLayoutListener(WaveLayoutListener listener) {
+    if (listeners == null) {
+      listeners = new ArrayList<>();
+    }
+    listeners.add(listener);
+  }
+
+  public void removeWaveLayoutListener(WaveLayoutListener listener) {
+    if (listeners != null) {
+      int position = listeners.indexOf(listener);
+      if (position >= 0) {
+        listeners.remove(position);
+      }
+    }
+  }
+
+  public void clearWaveLayoutListener() {
+    if (listeners != null) {
+      for (WaveLayoutListener listener : listeners) {
+        removeWaveLayoutListener(listener);
+      }
+      listeners.clear();
+      listeners = null;
     }
   }
 
@@ -243,7 +273,7 @@ public class WaveLayout extends RelativeLayout {
     restart();
   }
 
-  public int getDirection() {
+  public @Direction int getDirection() {
     return direction;
   }
 
@@ -332,20 +362,50 @@ public class WaveLayout extends RelativeLayout {
 
   public void start() {
     if (!isRunning()) {
-      for (WaveView waveView : waveViews) {
-        waveView.setVisibility(VISIBLE);
-      }
+      setWaveVisibility(View.VISIBLE);
     }
+
     animator = generateAnimation();
+    animator.removeAllListeners();
+    animator.addListener(new Animator.AnimatorListener() {
+      @Override public void onAnimationStart(Animator animation) {
+      }
+
+      @Override public void onAnimationEnd(Animator animation) {
+        notifyStop();
+        setWaveVisibility(View.INVISIBLE);
+      }
+
+      @Override public void onAnimationCancel(Animator animation) {
+      }
+
+      @Override public void onAnimationRepeat(Animator animation) {
+      }
+    });
+
+    notifyStart();
     animator.start();
   }
 
   public void stop() {
+    internalStop(false);
+  }
+
+  public void stop(boolean kindly) {
+    internalStop(kindly);
+  }
+
+  private void internalStop(boolean kindly) {
     if (isRunning()) {
-      for (WaveView waveView : waveViews) {
-        waveView.setVisibility(INVISIBLE);
+      if (kindly) {
+        notifyStopping();
+        ArrayList<Animator> animatorList = ((AnimatorSet) animator).getChildAnimations();
+        for (Animator animatorInList : animatorList) {
+          ((ObjectAnimator) animatorInList).setRepeatCount(0);
+        }
+      } else {
+        animator.end();
       }
-      animator.end();
     }
   }
 
@@ -359,8 +419,44 @@ public class WaveLayout extends RelativeLayout {
 
   public void restart() {
     if (isRunning()) {
+      notifyRestart();
+
       stop();
       start();
+    }
+  }
+
+  private void notifyRestart() {
+    if (listeners != null) {
+      for (WaveLayoutListener listener : listeners) {
+        listener.onRestart();
+      }
+    }
+  }
+
+  private void notifyStop() {
+    if (listeners != null) {
+      stopping = false;
+      for (WaveLayoutListener listener : listeners) {
+        listener.onStop();
+      }
+    }
+  }
+
+  private void notifyStopping() {
+    if (listeners != null && !stopping) {
+      stopping = true;
+      for (WaveLayoutListener listener : listeners) {
+        listener.onStopping();
+      }
+    }
+  }
+
+  private void notifyStart() {
+    if (listeners != null) {
+      for (WaveLayoutListener listener : listeners) {
+        listener.onStart();
+      }
     }
   }
 
@@ -368,8 +464,13 @@ public class WaveLayout extends RelativeLayout {
     return animator != null && animator.isRunning();
   }
 
-  private class WaveView extends View {
+  private void setWaveVisibility(int visibility) {
+    for (WaveView waveView : waveViews) {
+      waveView.setVisibility(visibility);
+    }
+  }
 
+  private class WaveView extends View {
     public WaveView(Context context) {
       super(context);
       this.setVisibility(INVISIBLE);
